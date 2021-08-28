@@ -17,10 +17,7 @@ exports.register = async (req, res, next) => {
             username, email, password
         })
 
-        res.status(201).json({
-            success: true,
-            user
-        })
+        sendToken(user, 201, res)
     } catch (error) {
         next(error)
     }
@@ -30,28 +27,28 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
     const { email, password } = req.body
 
+    /** Check if email and password is provided */
     if (!email || !password) {
-        return
-        next(new ErrorResponse('please provide an Email and Password', 400))
+        return next(new ErrorResponse('Please provide an email and password', 400))
     }
 
     try {
+        /** Check that user exists by email */
         const user = await User.findOne({ email }).select('+password')
 
         if (!user) {
             return next(new ErrorResponse('Invalid credentials', 401))
         }
 
+        /** Check that password match */
         const isMatch = await user.matchPassword(password)
 
         if (!isMatch) {
             return next(new ErrorResponse('Invalid credentials', 401))
         }
 
-        res.status(200).json({
-            success: true,
-            token: 'sakdpsd'
-        })
+        sendToken(user, 200, res)
+
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -60,10 +57,31 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.forgotPassword = (req, res, next) => {
-    res.send('forgotPassword route')
+/** forgot the password */
+exports.forgotPassword = async (req, res, next) => {
+    const { email } = req.body
+
+    try {
+        const user = User.findOne({ email })
+
+        if (!user) {
+            return next(new ErrorResponse('Email does not exist', 404))
+        }
+
+        const resetToken = user.getResetPasswordToken()
+
+        await user.save()
+    } catch (error) {
+
+    }
 }
 
 exports.resetPassword = (req, res, next) => {
     res.send('resetPassword route')
+}
+
+/** json webToken */
+const sendToken = (user, statusCode, res) => {
+    const token = user.getSignedToken()
+    res.status(statusCode).json({ success: true, token })
 }

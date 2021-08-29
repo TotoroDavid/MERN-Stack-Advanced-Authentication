@@ -55,12 +55,14 @@ UserSchema.methods.getSignedToken = function () {
 UserSchema.methods.getResetPasswordToken = function () {
     const resetToken = crypto.randomBytes(20).toString('hex')
 
+    /** hash token (private key) and save to database */
     this.resetPasswordToken = crypto
         .createHash('sha256')
         .update(resetToken)
         .digest('hex')
 
-    this.resetPasswordToken = Date.now() + 10 * (60 * 1000)
+    /** set token expire date */
+    this.resetPasswordExpire = Date.now() + 10 * (60 * 1000) // ten min 
 
     return resetToken
 }

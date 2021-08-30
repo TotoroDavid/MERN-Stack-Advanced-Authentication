@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ history }) => {
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -10,7 +10,13 @@ const RegisterScreen = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
 
-    const registerHandler = (e) => {
+    useEffect(() => {
+        if (localStorage.getItem('authToken')) {
+            history.push('/')
+        }
+    }, [history])
+
+    const registerHandler = async (e) => {
         e.preventDefault()
 
         const config = {
@@ -22,7 +28,22 @@ const RegisterScreen = () => {
             setPassword('')
             setConfirmPassword('')
             setTimeout(() => {
+                setError('')
+            }, 5000)
+            return setError('Password is incorrect')
+        }
 
+        try {
+            const { data } = await axios.post(
+                'http://localhost:5000/api/auth/register', { username, email, password }, config)
+
+            localStorage.setItem('auth token', data.token)
+
+            history.push('/')
+        } catch (error) {
+            setError(error.response.data.error)
+            setTimeout(() => {
+                setError('')
             }, 5000)
         }
     }
@@ -31,6 +52,7 @@ const RegisterScreen = () => {
         <div className='register-screen'>
             <form onSubmit={registerHandler} className='register-screen__form'>
                 <h3 className='register-screen__title'>Register</h3>
+                {error && <span className='error-message' >{error}</span>}
                 <div className='form-group'>
                     <label htmlFor="name">Username:</label>
                     <input

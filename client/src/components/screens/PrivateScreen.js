@@ -1,6 +1,21 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-const PrivateScreen = () => {
+const PrivateScreen = ({ history }) => {
+
+    const [error, setError] = useState('')
+    const [privateData, setPrivateData] = useState('')
+
+    useEffect(() => {
+        if (!localStorage.getItem('authToken')) {
+            history.push('/login')
+        }
+
+        const fetchPrivateData = async () => {
+
+        }
+    }, [])
+
     return (
         <div>
             private screen

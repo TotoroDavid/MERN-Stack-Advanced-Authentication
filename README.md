@@ -37,6 +37,6 @@ https://www.npmjs.com/package/json-web-token</br>
 sendgrid and nodemailer</br>
 https://sendgrid.com/blog/sending-email-nodemailer-sendgrid/</br>
 
-<img src='' >
-<img src='' >
-<img src='' >
+<img src='https://github.com/TotoroDavid/MERN-Stack-Advanced-Authentication/blob/master/client/public/Screen%20Shot%202021-08-31%20at%2010.39.34%20am.png?raw=true' >
+<img src='https://github.com/TotoroDavid/MERN-Stack-Advanced-Authentication/blob/master/client/public/Screen%20Shot%202021-08-31%20at%2010.39.19%20am.png?raw=true' >
+<img src='https://github.com/TotoroDavid/MERN-Stack-Advanced-Authentication/blob/master/client/public/Screen%20Shot%202021-08-31%20at%2010.39.54%20am.png?raw=true' >

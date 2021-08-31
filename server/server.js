@@ -11,6 +11,11 @@ const app = express()
 
 //middleware
 app.use(express.json())
+
+app.get("/", (req, res, next) => {
+    res.send("Api running");
+})
+
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/private', require('./routes/private'))
 /** Error handler middleware*/
